@@ -9,6 +9,12 @@
     "start:app": "webpack-dev-server",
     "build": "webpack -p"
   },
+  "dependencies": {
+    "axios": "^0.17.1",
+    "query-string": "^5.0.1",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0"
+  },
   "devDependencies": {
     "babel-core": "^6.25.0",
     "babel-loader": "^7.1.1",
@@ -26,9 +32,5 @@
     "url-loader": "^0.5.9",
     "webpack": "^3.3.0",
     "webpack-dev-server": "^2.5.1"
-  },
-  "dependencies": {
-    "react": "^16.2.0",
-    "react-dom": "^16.2.0"
   }
 }
