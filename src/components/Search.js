@@ -54,6 +54,7 @@ class Search extends React.Component {
   }
 
   render() {
+    console.log(this.state.github);
     return (
       <div>
         <h1>Hello Github {this.state.github.length}</h1>
