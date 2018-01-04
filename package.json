@@ -12,6 +12,7 @@
   "dependencies": {
     "axios": "^0.17.1",
     "bootstrap-css-only": "^3.3.7",
+    "lodash": "^4.17.4",
     "query-string": "^5.0.1",
     "react": "^16.2.0",
     "react-dom": "^16.2.0"

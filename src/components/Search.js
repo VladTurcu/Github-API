@@ -4,18 +4,17 @@ import SearchForm from './SearchForm';
 import ResultCard from './ResultCard';
 import Pagination from './Pagination';
 
-
-
 class Search extends React.Component {
   constructor() {
     super();
     this.state = {
       github: [],
       username: '',
-      total: 0,
+      sortDirection: 'asc',
+      query: '',
+      total: null,
       per_page: 10,
-      page: 1,
-      filter: []
+      page: 1
     };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -35,8 +34,18 @@ class Search extends React.Component {
     return this.callApi();
   }
 
+  handleSort = (e) => {
+    const sortDirection = e.target.value;
+    this.setState({ sortDirection });
+  }
+
+  handleSearch = (e) => {
+    const query = e.target.value;
+    this.setState({query});
+  }
+
   handleChange = ({ target: { name, value } }) => {
-    this.setState({ [name]: value});
+    this.setState({ [name]: value, page: 1}, () => console.log('This is the last one >>', value));
   }
 
   nextPage = () => {
@@ -53,30 +62,47 @@ class Search extends React.Component {
     },() => this.callApi());
   }
 
+  sortingRepos = () => {
+    if(this.state.sortDirection === 'desc') {
+      return this.state.github.reverse();
+    }else if(this.state.sortDirection === 'asc'){
+      return this.state.github.sort();
+    }
+  }
+
   render() {
-    console.log(this.state.github);
+    const orderedReps = this.sortingRepos();
+    const { query } = this.state;
+    const regex = new RegExp(query, 'i');
+    const repos = orderedReps.filter((repo) => regex.test(repo.name));
+
     return (
       <div>
         <h1>Hello Github {this.state.github.length}</h1>
         <SearchForm
           handleChange={this.handleChange}
           handleSubmit={this.handleSubmit}
+          handleSort={this.handleSort}
+          handleSearch={this.handleSearch}
           state={this.state}
         />
-
-        {this.state.github.map((repo) =>
+        <Pagination
+          state={this.state}
+          nextPage={this.nextPage}
+          previousPage={this.previousPage}
+        />
+        {repos.map((repo) =>
           <div key={repo.id}>
             <ResultCard
               repo={repo}
             />
           </div>
         )}
-        {this.state.total === 10 &&
         <Pagination
           state={this.state}
           nextPage={this.nextPage}
           previousPage={this.previousPage}
-        />}
+        />
       </div>
     );
   }
