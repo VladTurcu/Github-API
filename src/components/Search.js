@@ -1,5 +1,4 @@
 import React from 'react';
-import Axios from 'axios';
 import SearchForm from './SearchForm';
 import ResultCard from './ResultCard';
 import Pagination from './Pagination';
@@ -19,15 +18,12 @@ class Search extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  callApi = () => {
-    Axios
-      .get(`https://api.github.com/users/${this.state.username}/repos?page=${this.state.page}&per_page=${this.state.per_page}`)
-      .then(res => this.setState({
-        github: res.data,
-        total: res.data.length
-      }))
-      .catch(err => console.log(err));
+  callApi = async () => {
+    const response = await fetch(`https://api.github.com/users/${this.state.username}/repos?page=${this.state.page}&per_page=${this.state.per_page}`);
+    const res = await response.json();
+    this.setState({ github: res, total: res.length });
   }
+
 
   handleSubmit(e) {
     e.preventDefault();
@@ -45,7 +41,7 @@ class Search extends React.Component {
   }
 
   handleChange = ({ target: { name, value } }) => {
-    this.setState({ [name]: value, page: 1}, () => console.log('This is the last one >>', value));
+    this.setState({ [name]: value, page: 1});
   }
 
   nextPage = () => {
